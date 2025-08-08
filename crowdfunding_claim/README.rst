@@ -1,6 +1,6 @@
-============
-Crowdfunding
-============
+==============================
+Crowdfunding: Claim challenges
+==============================
 
 .. 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,10 +17,10 @@ Crowdfunding
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fcrowdfunding-lightgray.png?logo=github
-    :target: https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding
+    :target: https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding_claim
     :alt: OCA/crowdfunding
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/crowdfunding-14-0/crowdfunding-14-0-crowdfunding
+    :target: https://translation.odoo-community.org/projects/crowdfunding-14-0/crowdfunding-14-0-crowdfunding_claim
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
     :target: https://runboat.odoo-community.org/builds?repo=OCA/crowdfunding&target_branch=14.0
@@ -28,8 +28,7 @@ Crowdfunding
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module provides the basics to turn Odoo into a crowdfunding
-platform.
+This module allows portal users to claim challenges for themselves.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -41,48 +40,12 @@ platform.
 .. contents::
    :local:
 
-Configuration
-=============
-
-To configure this module, you need to:
-
-1. Go to Crowdfunding/Settings
-2. Review the preselected crowdfunding product that is used on vendor
-   bills to pay people
-
 Usage
 =====
 
-The module provides backend as well as frontend functionality.
-
-For the backend:
-
-1. Go to Crowdfunding
-2. Create a new crowdfunding challenge
-3. Set at least a name and a description
-4. Click 'Open'
-
-For the frontend:
-
-1. Navigate to /crowdfunding on your Odoo website
-2. Select a challenge from the list
-3. Join the discussion or add your pledge
-
-Known issues / Roadmap
-======================
-
-As this module is designed to provide the bare neccessities, a couple of
-other modules will add more advanced functionality
-
--  crowdfunding_membership allowing to restrict creating/claiming to
-   members only
--  crowdfunding_project allowing to create crowdfunding challenges from
-   projects/tasks or vice versa
--  crowdfunding_github allowing to create crowdfunding challenges from
-   issues of some github project
--  crowdfunding_gitlab the same as above but for gitlab
--  crowdfunding_category allowing to move some of the base company wide
-   configuration to categories
+1. Navigate to /crowdfunding on your Odoo website while being logged in
+2. Select an challenge from the list
+3. Click the 'Claim' button
 
 Bug Tracker
 ===========
@@ -90,7 +53,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/crowdfunding/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/crowdfunding/issues/new?body=module:%20crowdfunding%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/crowdfunding/issues/new?body=module:%20crowdfunding_claim%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -129,6 +92,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-hbrunn| 
 
-This module is part of the `OCA/crowdfunding <https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding>`_ project on GitHub.
+This module is part of the `OCA/crowdfunding <https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding_claim>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

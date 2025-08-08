@@ -11,4 +11,4 @@ For the frontend:
 
 1. Navigate to /crowdfunding on your Odoo website
 2. Select a challenge from the list
-3. Join the discussion, claim the challenge for yourself to solve or add your pledge
+3. Join the discussion or add your pledge

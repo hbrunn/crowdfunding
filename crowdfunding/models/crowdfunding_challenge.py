@@ -29,13 +29,17 @@ class CrowdfundingChallenge(models.Model):
     description_url = fields.Char()
     description_image = fields.Binary()
     claimed_partner_id = fields.Many2one(
-        "res.partner", string="Claimed by partner", tracking=True
+        "res.partner", string="Claimed by", tracking=True
     )
     target_amount = fields.Monetary(tracking=True)
     fee_amount = fields.Monetary(compute="_compute_amounts", store=True, readonly=True)
     fee_percentage = fields.Float(default=lambda self: self._default_fee_percentage())
     claimed_partner_amount = fields.Monetary(
-        compute="_compute_amounts", store=True, readonly=True
+        compute="_compute_amounts",
+        store=True,
+        readonly=True,
+        string="Amount payable",
+        help="The amount to be paid out",
     )
     funding_state = fields.Selection(
         [
@@ -56,9 +60,15 @@ class CrowdfundingChallenge(models.Model):
         store=True,
         tracking=True,
     )
-    transaction_count = fields.Integer(compute="_compute_transactions", store=True)
-    transaction_ids = fields.One2many(
-        "payment.transaction", "crowdfunding_challenge_id"
+    pledge_default_amount = fields.Monetary(
+        "Default pledge amount",
+        help="Fill in a proposed amount pledgers can modify",
+    )
+    invoice_count = fields.Integer(compute="_compute_invoices", store=True)
+    invoice_ids = fields.One2many(
+        "account.move",
+        "crowdfunding_challenge_id",
+        domain=[("move_type", "=", "out_invoice")],
     )
     vendor_bill_ids = fields.One2many(
         "account.move",
@@ -85,10 +95,9 @@ class CrowdfundingChallenge(models.Model):
     @api.depends("fee_percentage", "target_amount")
     def _compute_amounts(self):
         for this in self:
-            this.fee_amount = this.currency_id.round(
-                this.target_amount * this.fee_percentage
-            )
-            this.claimed_partner_amount = this.target_amount - this.fee_amount
+            amount_used = max(this.target_amount, this.pledged_amount)
+            this.fee_amount = this.currency_id.round(amount_used * this.fee_percentage)
+            this.claimed_partner_amount = amount_used - this.fee_amount
 
     @api.depends("pledged_amount", "target_amount")
     def _compute_funding_state(self):
@@ -102,13 +111,13 @@ class CrowdfundingChallenge(models.Model):
                 "needs_funding" if this.pledged_percentage < 100 else "funded"
             )
 
-    @api.depends("transaction_ids.amount", "transaction_ids.state")
-    def _compute_transactions(self):
+    @api.depends("invoice_ids.amount_total", "invoice_ids.amount_residual")
+    def _compute_invoices(self):
         for this in self:
-            this.transaction_count = len(this.transaction_ids)
+            this.invoice_count = len(this.invoice_ids)
             this.pledged_amount = sum(
-                this.transaction_ids.filtered(lambda x: x.state == "done").mapped(
-                    "amount"
+                this.invoice_ids.filtered(lambda x: x.payment_state == "paid").mapped(
+                    "amount_untaxed"
                 )
             )
 
@@ -166,31 +175,42 @@ class CrowdfundingChallenge(models.Model):
             {"state": "draft", "is_published": False, "claimed_partner_id": False}
         )
 
-    def action_payment_transactions(self):
+    def action_invoices(self):
         action = self.env["ir.actions.act_window"]._for_xml_id(
-            "payment.action_payment_transaction"
+            "account.action_move_out_invoice_type"
         )
-        return dict(action, domain=[("crowdfunding_challenge_id", "in", self.ids)])
+        return dict(
+            action,
+            domain=[
+                ("crowdfunding_challenge_id", "in", self.ids),
+                ("move_type", "=", "out_invoice"),
+            ],
+        )
 
     def action_vendor_bills(self):
         action = self.env["ir.actions.act_window"]._for_xml_id(
             "account.action_move_in_invoice_type",
         )
-        return dict(action, domain=[("crowdfunding_challenge_id", "in", self.ids)])
+        return dict(
+            action,
+            domain=[
+                ("crowdfunding_challenge_id", "in", self.ids),
+                ("move_type", "=", "in_invoice"),
+            ],
+        )
 
     def action_invoice_wizard(self):
         return self.env["ir.actions.act_window"]._for_xml_id(
             "crowdfunding.action_crowdfunding_invoicing_wizard"
         )
 
-    def _invoice(self, percentage=None, **kwargs):
-        AccountMove = self.env["account.move"]
-        invoices = AccountMove.browse([])
-        for this in self:
-            invoices += AccountMove.create(this._invoice_vals(percentage, **kwargs))
+    def _in_invoice(self, percentage=None, **kwargs):
+        invoices = self.env["account.move"].create(
+            [this._in_invoice_vals(percentage, **kwargs) for this in self]
+        )
         return invoices
 
-    def _invoice_vals(self, percentage=None, **kwargs):
+    def _in_invoice_vals(self, percentage=None, **kwargs):
         self.ensure_one()
         invoice_vals = self.env["account.move"].play_onchanges(
             {
@@ -216,25 +236,40 @@ class CrowdfundingChallenge(models.Model):
             invoice_line_ids=[(0, 0, invoice_line_vals)],
         )
 
+    def _out_invoice(self, partner, amount, **kwargs):
+        return self.env["account.move"].create(
+            [this._out_invoice_vals(partner, amount, **kwargs) for this in self]
+        )
+
+    def _out_invoice_vals(self, partner, amount, **kwargs):
+        self.ensure_one()
+        invoice_vals = self.env["account.move"].play_onchanges(
+            {
+                "move_type": "out_invoice",
+                "ref": self.name,
+                "crowdfunding_challenge_id": self.id,
+                "partner_id": partner.id,
+            },
+            ["partner_id"],
+        )
+        invoice_line_vals = self.env["account.move.line"].play_onchanges(
+            {
+                "move_id": self.env["account.move"].new(invoice_vals),
+                "product_id": self.company_id.crowdfunding_product_id.id,
+            },
+            ["product_id"],
+        )
+        invoice_line_vals["price_unit"] = amount
+        return dict(
+            invoice_vals,
+            invoice_line_ids=[(0, 0, invoice_line_vals)],
+        )
+
     def _domain_portal_access(self):
         return [("is_published", "=", True)]
 
     def _domain_website_access(self):
         return [("is_published", "=", True)]
-
-    def _claim(self, partner=None):
-        partner = partner or self.env.user.partner_id
-        can_claim = self.filtered(lambda x: x._can_claim(partner))
-        can_claim.write(
-            {
-                "claimed_partner_id": partner.id,
-            }
-        )
-        can_claim.action_claimed()
-
-    def _can_claim(self, partner=None):
-        self.ensure_one()
-        return not self.claimed_partner_id and self.state == "open"
 
     def _can_pay(self, partner=None):
         self.ensure_one()

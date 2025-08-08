@@ -23,6 +23,7 @@
         "security/ir.model.access.csv",
         "templates/crowdfunding_challenge.xml",
         "templates/payment.xml",
+        "views/account_move.xml",
         "views/crowdfunding_challenge.xml",
         "views/payment_transaction.xml",
         "views/res_config_settings.xml",

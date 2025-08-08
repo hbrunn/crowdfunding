@@ -39,7 +39,7 @@
                     />
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', '!=', 'submitted')]}"
+                        attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', 'not in', ['claimed', 'submitted'])]}"
                         type="object"
                         name="action_invoice_wizard"
                         string="Create invoice"
@@ -65,16 +65,16 @@
                         >
                         </button>
                         <button
-                            name="action_payment_transactions"
+                            name="action_invoices"
                             class="oe_stat_button"
                             type="object"
                             icon="fa-money"
-                            attrs="{'invisible': [('transaction_count', '=', 0)]}"
+                            attrs="{'invisible': [('invoice_count', '=', 0)]}"
                         >
                             <field
-                                name="transaction_count"
+                                name="invoice_count"
                                 widget="statinfo"
-                                string="Transactions"
+                                string="Invoices"
                             />
                         </button>
                         <field
@@ -87,7 +87,10 @@
                     </h1>
                     <group name="main">
                         <group name="left">
-                            <field name="target_amount" />
+                            <field
+                                name="target_amount"
+                                placeholder="Fill in the minimum amount"
+                            />
                             <field name="fee_percentage" widget="percentage" />
                             <field name="fee_amount" />
                         </group>
@@ -96,6 +99,7 @@
                             <field
                                 name="claimed_partner_id"
                                 attrs="{'readonly': [('state', 'not in', ('draft', 'open'))]}"
+                                placeholder="Select partner to work on this challenge"
                             />
                             <field name="claimed_partner_amount" />
                         </group>
@@ -108,7 +112,11 @@
                             />
                             <group>
                                 <group name="left">
-                                    <field name="description_url" widget="url" />
+                                    <field
+                                        name="description_url"
+                                        widget="url"
+                                        placeholder="Link for more information"
+                                    />
                                 </group>
                                 <group name="right">
                                     <field name="description_image" widget="image" />
@@ -125,6 +133,7 @@
                                     />
                                 </group>
                                 <group name="right">
+                                    <field name="pledge_default_amount" />
                                     <field
                                         name="company_id"
                                         groups="base.group_multi_company"

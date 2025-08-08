@@ -9,6 +9,9 @@
                 <group name="main">
                     <field name="percentage" widget="percentage" required="True" />
                 </group>
+                <label for="vendor_bill_ids" />
+                <field name="vendor_bill_ids" />
+                <field name="challenge_ids" invisible="1" />
                 <footer>
                     <button
                         class="btn btn-primary"

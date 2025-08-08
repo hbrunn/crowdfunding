@@ -58,22 +58,6 @@
                             <t t-esc="object.claimed_partner_id.sudo().name" />
                         </div>
                         <ul class="nav">
-                            <li t-if="object._can_claim()" class="nav-item m-1">
-                            <form
-                                    t-attf-action="{{object.website_url}}/claim"
-                                    method="post"
-                                >
-                                <input
-                                        type="hidden"
-                                        name="csrf_token"
-                                        t-att-value="request.csrf_token()"
-                                    />
-                                <button
-                                        type="submit"
-                                        class="btn btn-primary"
-                                    >Claim</button>
-                            </form>
-                            </li>
                             <li t-if="object._can_pay()" class="nav-item m-1">
                                 <a
                                     class="btn btn-primary"

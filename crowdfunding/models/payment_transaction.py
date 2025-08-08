@@ -7,7 +7,9 @@ from odoo import fields, models
 class PaymentTransaction(models.Model):
     _inherit = "payment.transaction"
 
-    crowdfunding_challenge_id = fields.Many2one("crowdfunding.challenge")
+    crowdfunding_challenge_id = fields.Many2one(
+        related="invoice_ids.crowdfunding_challenge_id"
+    )
 
     def _post_process(self):
         for this in self:

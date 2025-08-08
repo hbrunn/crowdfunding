@@ -1,49 +1,16 @@
 # Copyright 2025 Hunki Enterprises BV
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
 
-import uuid
-from contextlib import contextmanager
 
 import werkzeug
 
 from odoo import _, http
 from odoo.http import request
 
-from odoo.addons.payment.controllers.portal import PaymentProcessing, WebsitePayment
+from odoo.addons.payment.controllers.portal import WebsitePayment
 
 
 class Payment(WebsitePayment):
-    @http.route()
-    def transaction(self, *args, **kwargs):
-        with self._crowdfunding_update_transaction(kwargs):
-            return super().transaction(*args, **kwargs)
-
-    @http.route()
-    def payment_token(self, *args, **kwargs):
-        with self._crowdfunding_update_transaction(kwargs):
-            return super().payment_token(*args, **kwargs)
-
-    @contextmanager
-    def _crowdfunding_update_transaction(self, kwargs):
-        transactions_before = set(PaymentProcessing.get_payment_transaction_ids())
-        yield
-        transactions = (
-            request.env["payment.transaction"]
-            .browse(
-                set(PaymentProcessing.get_payment_transaction_ids())
-                - transactions_before
-            )
-            .sudo()
-        )
-        challenge_id = request.httprequest.args.get(
-            "crowdfunding_challenge_id"
-        ) or kwargs.get("crowdfunding_challenge_id")
-        if challenge_id:
-            transactions.filtered(
-                lambda x: not ("sale_order_ids" in x._fields and x.sale_order_ids)
-                and not x.invoice_ids
-            ).write({"crowdfunding_challenge_id": int(challenge_id)})
-
     def _crowdfunding_get_partner(self):
         return (
             not request.env.user._is_public()
@@ -121,27 +88,27 @@ class Payment(WebsitePayment):
         elif "amount" not in kwargs:
             result = request.render("crowdfunding.pay_details", {"object": challenge})
         else:
-            kwargs["amount"] = abs(float(kwargs["amount"]))
-            kwargs["reference"] = "crowdfunding-%s-%s" % (
-                challenge.id,
-                uuid.uuid4(),
+            PaymentLinkWizard = request.env["payment.link.wizard"]
+            invoice = challenge.sudo()._out_invoice(
+                partner, abs(float(kwargs["amount"]))
             )
 
-            payment_wizard = request.env["payment.link.wizard"].new(
-                {
-                    "partner_id": partner.id,
-                    "currency_id": challenge.currency_id.id,
-                    "amount": kwargs["amount"],
-                    "res_model": challenge._name,
-                    "res_id": challenge.id,
-                }
-            )
+            wizard_vals = PaymentLinkWizard.with_context(
+                active_model=invoice._name,
+                active_id=invoice.id,
+            ).default_get(PaymentLinkWizard._fields)
+
+            payment_wizard = PaymentLinkWizard.new(wizard_vals)
+
             payment_wizard._compute_values()
             kwargs["access_token"] = payment_wizard.access_token
-            kwargs["partner_id"] = partner.id
-
+            kwargs["company_id"] = invoice.company_id.id
             kwargs["currency_id"] = challenge.currency_id.id
+            kwargs["invoice_id"] = invoice.id
+            kwargs["partner_id"] = partner.id
+            kwargs["reference"] = "crowdfunding-%s-%s" % (
+                challenge.id,
+                partner.id,
+            )
             result = self.pay(**kwargs)
-            result.template = "crowdfunding.pay"
-            result.qcontext["crowdfunding_challenge"] = challenge
         return result
