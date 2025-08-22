@@ -10,14 +10,16 @@ class CrowdfundingInvoicingWizard(models.TransientModel):
     percentage = fields.Float(default=1)
     percentage_paid = fields.Float(compute="_compute_percentage_paid", readonly=True)
     challenge_ids = fields.Many2many("crowdfunding.challenge")
-    vendor_bill_ids = fields.One2many(
-        related="challenge_ids.vendor_bill_ids", string="Existing vendor bills"
+    vendor_bill_ids = fields.Many2many(
+        "account.move",
+        compute="_compute_vendor_bill_ids",
+        string="Existing vendor bills",
     )
 
     def default_get(self, fields_list):
         result = super().default_get(fields_list)
         if "challenge_ids" in fields_list and "challenge_ids" not in result:
-            result["challenge_ids"] = [(6, 0, self.env.context.get("active_ids"))]
+            result["challenge_ids"] = [(6, 0, self.env.context.get("active_ids", []))]
         return result
 
     @api.depends("challenge_ids")
@@ -26,6 +28,11 @@ class CrowdfundingInvoicingWizard(models.TransientModel):
             this.percentage_paid = sum(
                 this.mapped("challenge_ids.vendor_amount")
             ) / sum(this.mapped("challenge_ids.claimed_partner_amount"))
+
+    @api.depends("challenge_ids")
+    def _compute_vendor_bill_ids(self):
+        for this in self:
+            this.vendor_bill_ids = this.challenge_ids.vendor_bill_ids
 
     def action_invoice(self):
         invoices = self.challenge_ids._in_invoice(self.percentage)

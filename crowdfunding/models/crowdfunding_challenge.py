@@ -157,7 +157,7 @@ class CrowdfundingChallenge(models.Model):
         for this in self:
             this.invoice_count = len(this.invoice_ids)
             this.pledged_amount = sum(
-                this.invoice_ids.filtered(lambda x: x.payment_state == "paid").mapped(
+                this.invoice_ids.filtered(lambda x: x.state == "posted").mapped(
                     "amount_total"
                 )
             )
@@ -171,9 +171,9 @@ class CrowdfundingChallenge(models.Model):
         for this in self:
             this.vendor_bill_count = len(this.vendor_bill_ids)
             this.vendor_amount = sum(
-                this.vendor_bill_ids.filtered(
-                    lambda x: x.payment_state == "paid"
-                ).mapped("amount_total")
+                this.vendor_bill_ids.filtered(lambda x: x.state == "posted").mapped(
+                    "amount_total"
+                )
             )
             this.vendor_amount_unpaid = (
                 sum(this.vendor_bill_ids.mapped("amount_total")) - this.vendor_amount
@@ -259,9 +259,17 @@ class CrowdfundingChallenge(models.Model):
         )
 
     def action_invoice_wizard(self):
-        return self.env["ir.actions.act_window"]._for_xml_id(
+        action = self.env["ir.actions.act_window"]._for_xml_id(
             "crowdfunding.action_crowdfunding_invoicing_wizard"
         )
+        # workaround for weird bug in v14 not displaying correct status for vendor_bill_ids
+        # in not yet saved wizard, in newer versions just returning the action should work
+        wizard = (
+            self.env[action["res_model"]].with_context(active_ids=self.ids).create({})
+        )
+        wizard._onchange_vendor_bill_ids()
+        action["res_id"] = wizard.id
+        return action
 
     def _in_invoice(self, percentage=None, **kwargs):
         invoices = self.env["account.move"].create(
@@ -274,7 +282,6 @@ class CrowdfundingChallenge(models.Model):
         invoice_vals = self.env["account.move"].play_onchanges(
             {
                 "move_type": "in_invoice",
-                "ref": self.name,
                 "crowdfunding_challenge_id": self.id,
                 "partner_id": self.claimed_partner_id.id,
             },

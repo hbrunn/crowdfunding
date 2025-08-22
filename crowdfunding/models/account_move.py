@@ -8,3 +8,12 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     crowdfunding_challenge_id = fields.Many2one("crowdfunding.challenge")
+    crowdfunding_vendor_amount = fields.Monetary(
+        related="crowdfunding_challenge_id.vendor_amount"
+    )
+    crowdfunding_target_amount = fields.Monetary(
+        related="crowdfunding_challenge_id.target_amount"
+    )
+    crowdfunding_pledged_amount = fields.Monetary(
+        related="crowdfunding_challenge_id.pledged_amount"
+    )

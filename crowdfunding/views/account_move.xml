@@ -9,9 +9,21 @@
             <group position="inside">
                 <group
                     name="crowdfunding"
-                    attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                    attrs="{'invisible': [('crowdfunding_challenge_id', '=', False), ('state', '!=', 'draft')]}"
                 >
                     <field name="crowdfunding_challenge_id" />
+                    <field
+                        name="crowdfunding_target_amount"
+                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                    />
+                    <field
+                        name="crowdfunding_pledged_amount"
+                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                    />
+                    <field
+                        name="crowdfunding_vendor_amount"
+                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                    />
                 </group>
             </group>
         </field>
