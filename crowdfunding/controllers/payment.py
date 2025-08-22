@@ -107,5 +107,9 @@ class Payment(WebsitePayment):
             kwargs["currency_id"] = challenge.currency_id.id
             kwargs["invoice_id"] = invoice.id
             kwargs["partner_id"] = partner.id
+            kwargs["reference"] = "crowdfunding-%s-%s" % (
+                challenge.id,
+                partner.id,
+            )
             result = self.pay(**kwargs)
         return result
