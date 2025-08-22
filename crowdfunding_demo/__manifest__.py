@@ -16,5 +16,7 @@
         "payment_test",
         "payment_transfer",
     ],
-    "demo": [],
+    "demo": [
+        "demo/payment_acquirer.xml",
+    ],
 }

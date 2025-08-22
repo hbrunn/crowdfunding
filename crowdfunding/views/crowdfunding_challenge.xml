@@ -172,7 +172,6 @@
                 <field name="vendor_amount" />
                 <field name="website_published" />
                 <field name="pledged_percentage" widget="progressbar" />
-                <field name="target_amount" />
             </tree>
         </field>
     </record>
