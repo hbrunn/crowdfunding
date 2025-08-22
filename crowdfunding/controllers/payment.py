@@ -101,6 +101,7 @@ class Payment(WebsitePayment):
             payment_wizard = PaymentLinkWizard.new(wizard_vals)
 
             payment_wizard._compute_values()
+            kwargs["amount"] = invoice.amount_total
             kwargs["access_token"] = payment_wizard.access_token
             kwargs["company_id"] = invoice.company_id.id
             kwargs["currency_id"] = challenge.currency_id.id

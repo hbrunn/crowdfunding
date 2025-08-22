@@ -24,6 +24,11 @@ class CrowdfundingChallenge(models.Model):
         ],
         default="draft",
         tracking=True,
+        help="Draft: The challenge is in preparation\n"
+        "Open: The challenge is visible for users, payments can be done\n"
+        "Claimed: Somebody has been assigned to work on the challenge\n"
+        "Submitted: Work is submited, no further payments possible\n"
+        "Done: Work is done, all payments done",
     )
     description = fields.Html()
     description_url = fields.Char()
@@ -55,7 +60,21 @@ class CrowdfundingChallenge(models.Model):
         compute="_compute_funding_state", readonly=True, store=True, tracking=True
     )
     pledged_amount = fields.Monetary(
-        compute="_compute_transactions",
+        compute="_compute_invoices",
+        readonly=True,
+        store=True,
+        tracking=True,
+    )
+    pledged_amount_total = fields.Monetary(
+        string="Pledged amount + unpaid",
+        compute="_compute_invoices",
+        readonly=True,
+        store=True,
+        tracking=True,
+    )
+    pledged_amount_unpaid = fields.Monetary(
+        string="Unpaid pledges",
+        compute="_compute_invoices",
         readonly=True,
         store=True,
         tracking=True,
@@ -70,6 +89,28 @@ class CrowdfundingChallenge(models.Model):
         "crowdfunding_challenge_id",
         domain=[("move_type", "=", "out_invoice")],
     )
+    vendor_amount = fields.Monetary(
+        "Amount paid out",
+        compute="_compute_vendor_bills",
+        readonly=True,
+        store=True,
+        tracking=True,
+    )
+    vendor_amount_unpaid = fields.Monetary(
+        "Amount to pay",
+        compute="_compute_vendor_bills",
+        readonly=True,
+        store=True,
+        tracking=True,
+    )
+    vendor_amount_total = fields.Monetary(
+        "Amount to pay + paid",
+        compute="_compute_vendor_bills",
+        readonly=True,
+        store=True,
+        tracking=True,
+    )
+    vendor_bill_count = fields.Integer(compute="_compute_vendor_bills", store=True)
     vendor_bill_ids = fields.One2many(
         "account.move",
         "crowdfunding_challenge_id",
@@ -117,9 +158,27 @@ class CrowdfundingChallenge(models.Model):
             this.invoice_count = len(this.invoice_ids)
             this.pledged_amount = sum(
                 this.invoice_ids.filtered(lambda x: x.payment_state == "paid").mapped(
-                    "amount_untaxed"
+                    "amount_total"
                 )
             )
+            this.pledged_amount_unpaid = (
+                sum(this.invoice_ids.mapped("amount_total")) - this.pledged_amount
+            )
+            this.pledged_amount_total = this.pledged_amount + this.pledged_amount_unpaid
+
+    @api.depends("vendor_bill_ids.amount_total", "vendor_bill_ids.amount_residual")
+    def _compute_vendor_bills(self):
+        for this in self:
+            this.vendor_bill_count = len(this.vendor_bill_ids)
+            this.vendor_amount = sum(
+                this.vendor_bill_ids.filtered(
+                    lambda x: x.payment_state == "paid"
+                ).mapped("amount_total")
+            )
+            this.vendor_amount_unpaid = (
+                sum(this.vendor_bill_ids.mapped("amount_total")) - this.vendor_amount
+            )
+            this.vendor_amount_total = this.vendor_amount + this.vendor_amount_unpaid
 
     def _compute_website_url(self):
         for this in self:

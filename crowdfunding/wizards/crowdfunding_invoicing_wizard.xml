@@ -8,6 +8,7 @@
             <form>
                 <group name="main">
                     <field name="percentage" widget="percentage" required="True" />
+                    <field name="percentage_paid" widget="percentage" />
                 </group>
                 <label for="vendor_bill_ids" />
                 <field name="vendor_bill_ids" />
