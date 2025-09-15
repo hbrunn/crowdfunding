@@ -9,6 +9,11 @@ class TestCrowdfundingFrontend(odoo.tests.HttpCase):
         Test pledging for a challenge without being logged in
         """
         challenge = self.env.ref("crowdfunding.demo_challenge")
+        import logging
+
+        import requests
+
+        logging.info(requests.get("http://localhost:8069"))
         self.start_tour("/", "crowdfunding_frontend")
         self.assertEqual(challenge.pledged_amount_unpaid, 4242)
         self.assertEqual(
