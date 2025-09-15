@@ -32,8 +32,13 @@ class CrowdfundingChallenge(models.Model):
         "Done: Work is done, all payments done",
     )
     description = fields.Html()
-    description_url = fields.Char()
-    description_image = fields.Binary()
+    description_url = fields.Char(
+        "Description URL",
+        help="URL for more information about this challenge"
+    )
+    description_image = fields.Binary(
+        help="Image that will be displayed on the challenge description"
+    )
     claimed_partner_id = fields.Many2one("res.partner", string="Vendor", tracking=True)
     target_amount = fields.Monetary(tracking=True)
     fee_amount = fields.Monetary(

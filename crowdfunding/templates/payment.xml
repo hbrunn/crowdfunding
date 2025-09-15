@@ -110,6 +110,20 @@
                             />
                         </div>
                         <div class="form-group">
+                            <t t-set="field" t-value="'zip'" />
+                            <label t-att-for="field">Zip</label>
+                            <input
+                                t-att-id="field"
+                                t-att-name="field"
+                                t-att-value="form_values.get(field)"
+                                t-attf-class="form-control {{'is-invalid' if field in form_errors else 'is-valid' if field in form_values else ''}}"
+                            />
+                            <div
+                                class="invalid-feedback"
+                                t-esc="form_errors.get(field)"
+                            />
+                        </div>
+                        <div class="form-group">
                             <t t-set="field" t-value="'country_id'" />
                             <label t-att-for="field">Country</label>
                             <select
