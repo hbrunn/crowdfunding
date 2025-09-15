@@ -26,30 +26,33 @@ class CrowdfundingChallenge(models.Model):
         tracking=True,
         help="Draft: The challenge is in preparation\n"
         "Open: The challenge is visible for users, payments can be done\n"
-        "Claimed: Somebody has been assigned to work on the challenge\n"
-        "Submitted: Work is submited, no further payments possible\n"
+        "Claimed: Somebody has been assigned to work on the challenge, "
+        "payments can be done\n"
+        "Submitted: Work is submitted, no further payments possible\n"
         "Done: Work is done, all payments done",
     )
     description = fields.Html()
     description_url = fields.Char()
     description_image = fields.Binary()
-    claimed_partner_id = fields.Many2one(
-        "res.partner", string="Claimed by", tracking=True
-    )
+    claimed_partner_id = fields.Many2one("res.partner", string="Vendor", tracking=True)
     target_amount = fields.Monetary(tracking=True)
     fee_amount = fields.Monetary(
         compute="_compute_amounts",
         store=True,
         readonly=True,
+        help="Commission Fee Amount",
         help="When a challenge is claimed, this amount will be deducted "
         "from the total amount pledged to cover overhead costs",
     )
-    fee_percentage = fields.Float(default=lambda self: self._default_fee_percentage())
+    fee_percentage = fields.Float(
+        default=lambda self: self._default_fee_percentage(),
+        help="Commission Fee %",
+    )
     claimed_partner_amount = fields.Monetary(
         compute="_compute_amounts",
         store=True,
         readonly=True,
-        string="Amount payable",
+        string="Vendor Amount",
         help="The amount to be paid out",
     )
     funding_state = fields.Selection(
@@ -63,7 +66,11 @@ class CrowdfundingChallenge(models.Model):
         tracking=True,
     )
     pledged_percentage = fields.Float(
-        compute="_compute_funding_state", readonly=True, store=True, tracking=True
+        string="Pledged %",
+        compute="_compute_funding_state",
+        readonly=True,
+        store=True,
+        tracking=True,
     )
     pledged_amount = fields.Monetary(
         compute="_compute_invoices",
@@ -72,21 +79,21 @@ class CrowdfundingChallenge(models.Model):
         tracking=True,
     )
     pledged_amount_total = fields.Monetary(
-        string="Pledged amount + unpaid",
+        string="Pledged Amount + Unpaid",
         compute="_compute_invoices",
         readonly=True,
         store=True,
         tracking=True,
     )
     pledged_amount_unpaid = fields.Monetary(
-        string="Unpaid pledges",
+        string="Unpaid Pledges",
         compute="_compute_invoices",
         readonly=True,
         store=True,
         tracking=True,
     )
     pledge_default_amount = fields.Monetary(
-        "Default pledge amount",
+        "Default Pledge Amount",
         help="Fill in a proposed amount pledgers can modify",
     )
     invoice_count = fields.Integer(compute="_compute_invoices", store=True)
@@ -96,21 +103,21 @@ class CrowdfundingChallenge(models.Model):
         domain=[("move_type", "=", "out_invoice")],
     )
     vendor_amount = fields.Monetary(
-        "Amount paid out",
+        "Vendor amount paid",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,
         tracking=True,
     )
     vendor_amount_unpaid = fields.Monetary(
-        "Amount to pay",
+        "Vendor Amount Unpaid",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,
         tracking=True,
     )
     vendor_amount_total = fields.Monetary(
-        "Amount to pay + paid",
+        "Amount To Pay + Paid",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,

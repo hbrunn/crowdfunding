@@ -28,28 +28,28 @@
                         attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', '!=', 'open')]}"
                         type="object"
                         name="action_claimed"
-                        string="Set claimed"
+                        string="Set Claimed"
                     />
                     <button
                         class="btn btn-primary"
                         attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', 'not in', ['open', 'claimed'])]}"
                         type="object"
                         name="action_submitted"
-                        string="Set submitted"
+                        string="Mark As Submitted"
                     />
                     <button
                         class="btn btn-primary"
                         attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', 'not in', ['claimed', 'submitted'])]}"
                         type="object"
                         name="action_invoice_wizard"
-                        string="Create invoice"
+                        string="Create Vendor Bill"
                     />
                     <button
                         class="btn btn-primary"
                         attrs="{'invisible': [('state', '!=', 'submitted')]}"
                         type="object"
                         name="action_done"
-                        string="Set done"
+                        string="Set Done"
                     />
                     <field name="state" widget="statusbar" />
                 </header>
@@ -65,7 +65,7 @@
                             <field
                                 name="vendor_bill_count"
                                 widget="statinfo"
-                                string="Vendor bills"
+                                string="Vendor Bills"
                             />
                         </button>
                         <button
@@ -78,7 +78,7 @@
                             <field
                                 name="invoice_count"
                                 widget="statinfo"
-                                string="Invoices"
+                                string="Customer Invoices"
                             />
                         </button>
                         <field
@@ -132,7 +132,7 @@
                                 </group>
                             </group>
                         </page>
-                        <page string="Miscellaneous" name="misc">
+                        <page string="Other info" name="misc">
                             <group>
                                 <group name="left">
                                     <field name="website_meta_keywords" />
