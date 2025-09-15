@@ -100,7 +100,7 @@ class CrowdfundingChallenge(models.Model):
     invoice_ids = fields.One2many(
         "account.move",
         "crowdfunding_challenge_id",
-        domain=[("move_type", "=", "out_invoice")],
+        domain=[("move_type", "in", ["out_invoice", "out_refund"])],
     )
     vendor_amount = fields.Monetary(
         "Vendor Amount Paid",
@@ -127,7 +127,7 @@ class CrowdfundingChallenge(models.Model):
     vendor_bill_ids = fields.One2many(
         "account.move",
         "crowdfunding_challenge_id",
-        domain=[("move_type", "=", "in_invoice")],
+        domain=[("move_type", "in", ["in_invoice", "in_refund"])],
     )
     currency_id = fields.Many2one(related="company_id.currency_id")
     website_meta_title = fields.Char(related="name")
@@ -171,11 +171,12 @@ class CrowdfundingChallenge(models.Model):
             this.invoice_count = len(this.invoice_ids)
             this.pledged_amount = sum(
                 this.invoice_ids.filtered(lambda x: x.state == "posted").mapped(
-                    "amount_total"
+                    "amount_total_signed"
                 )
             )
             this.pledged_amount_unpaid = (
-                sum(this.invoice_ids.mapped("amount_total")) - this.pledged_amount
+                sum(this.invoice_ids.mapped("amount_total_signed"))
+                -this.pledged_amount
             )
             this.pledged_amount_total = this.pledged_amount + this.pledged_amount_unpaid
 
@@ -185,11 +186,12 @@ class CrowdfundingChallenge(models.Model):
             this.vendor_bill_count = len(this.vendor_bill_ids)
             this.vendor_amount = sum(
                 this.vendor_bill_ids.filtered(lambda x: x.state == "posted").mapped(
-                    "amount_total"
+                    "amount_total_signed"
                 )
             )
             this.vendor_amount_unpaid = (
-                sum(this.vendor_bill_ids.mapped("amount_total")) - this.vendor_amount
+                sum(this.vendor_bill_ids.mapped("amount_total_signed"))
+                -this.vendor_amount
             )
             this.vendor_amount_total = this.vendor_amount + this.vendor_amount_unpaid
 
@@ -227,7 +229,7 @@ class CrowdfundingChallenge(models.Model):
                     sum(
                         this.vendor_bill_ids.filtered(
                             lambda x: x.payment_state == "paid"
-                        ).mapped("amount_total")
+                        ).mapped("amount_total_signed")
                     ),
                     this.claimed_partner_amount,
                 )
@@ -255,7 +257,7 @@ class CrowdfundingChallenge(models.Model):
             action,
             domain=[
                 ("crowdfunding_challenge_id", "in", self.ids),
-                ("move_type", "=", "out_invoice"),
+                ("move_type", "in", ["out_invoice", "out_refund"]),
             ],
         )
 
@@ -267,7 +269,7 @@ class CrowdfundingChallenge(models.Model):
             action,
             domain=[
                 ("crowdfunding_challenge_id", "in", self.ids),
-                ("move_type", "=", "in_invoice"),
+                ("move_type", "in", ["in_invoice", "in_refund"]),
             ],
         )
 
