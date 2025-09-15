@@ -6,6 +6,7 @@ from odoo import api, fields, models
 
 class CrowdfundingInvoicingWizard(models.TransientModel):
     _name = "crowdfunding.invoicing.wizard"
+    _description = "Crowdfunding Invoicing Wizard"
 
     percentage = fields.Float(default=1)
     percentage_paid = fields.Float(compute="_compute_percentage_paid", readonly=True)
