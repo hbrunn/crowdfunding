@@ -24,5 +24,8 @@
                             </form>
                             </li>
         </xpath>
+        <xpath expr="//div[@id='discuss']" position="attributes">
+            <attribute name="t-if">not hide_discuss</attribute>
+        </xpath>
     </template>
 </data>

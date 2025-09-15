@@ -20,6 +20,7 @@ class CrowdfundingController(crowdfunding_main.CrowdfundingController):
         if challenge._can_claim(request.env.user.partner_id):
             challenge.sudo()._claim(request.env.user.partner_id)
             values = self._detail_render_context(challenge)
+            values["hide_discuss"] = True
             return request.render("crowdfunding.template_challenge_detail", values)
         else:
             # TODO nicer error

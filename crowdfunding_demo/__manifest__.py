@@ -18,5 +18,6 @@
     ],
     "demo": [
         "demo/payment_acquirer.xml",
+        "demo/res_company.xml",
     ],
 }
