@@ -18,7 +18,7 @@
                         class="btn btn-primary"
                         type="object"
                         name="action_invoice"
-                        string="Create invoices"
+                        string="Create Vendor Bills"
                     />
                     <button class="btn" special="cancel" string="Cancel" />
                 </footer>
@@ -27,7 +27,7 @@
     </record>
 
     <record id="action_crowdfunding_invoicing_wizard" model="ir.actions.act_window">
-        <field name="name">Create Invoice</field>
+        <field name="name">Create Vendor Bills</field>
         <field name="res_model">crowdfunding.invoicing.wizard</field>
         <field
             name="binding_model_id"
