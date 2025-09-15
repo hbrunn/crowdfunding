@@ -172,7 +172,7 @@
                 <field name="pledged_amount_total" />
                 <field name="vendor_amount" />
                 <field name="website_published" />
-                <field name="pledged_percentage" widget="progressbar" />
+                <field name="pledged_percentage" widget="percentage" />
             </tree>
         </field>
     </record>
