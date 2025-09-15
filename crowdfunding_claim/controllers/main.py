@@ -6,8 +6,10 @@ import werkzeug
 from odoo import http
 from odoo.http import request
 
+from odoo.addons.crowdfunding.controllers import main as crowdfunding_main
 
-class CrowdfundingController(http.Controller):
+
+class CrowdfundingController(crowdfunding_main.CrowdfundingController):
     @http.route(
         ["/crowdfunding/<model('crowdfunding.challenge'):challenge>/claim"],
         type="http",
