@@ -7,7 +7,7 @@ from odoo import fields, models
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    crowdfunding_challenge_id = fields.Many2one("crowdfunding.challenge")
+    crowdfunding_challenge_id = fields.Many2one("crowdfunding.challenge", index=True)
     crowdfunding_vendor_amount = fields.Monetary(
         related="crowdfunding_challenge_id.vendor_amount"
     )
