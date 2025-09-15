@@ -103,7 +103,7 @@ class CrowdfundingChallenge(models.Model):
         domain=[("move_type", "=", "out_invoice")],
     )
     vendor_amount = fields.Monetary(
-        "Vendor amount paid",
+        "Vendor Amount Paid",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,

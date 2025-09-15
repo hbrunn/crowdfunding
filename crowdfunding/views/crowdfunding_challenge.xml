@@ -169,6 +169,7 @@
                 <field name="target_amount" />
                 <field name="pledged_amount" />
                 <field name="pledged_amount_unpaid" />
+                <field name="pledged_amount_total" />
                 <field name="vendor_amount" />
                 <field name="website_published" />
                 <field name="pledged_percentage" widget="progressbar" />
