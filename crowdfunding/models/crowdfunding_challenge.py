@@ -40,7 +40,7 @@ class CrowdfundingChallenge(models.Model):
         compute="_compute_amounts",
         store=True,
         readonly=True,
-        help="Commission Fee Amount",
+        string="Commission Fee Amount",
         help="When a challenge is claimed, this amount will be deducted "
         "from the total amount pledged to cover overhead costs",
     )
