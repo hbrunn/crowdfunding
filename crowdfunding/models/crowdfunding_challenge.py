@@ -37,7 +37,13 @@ class CrowdfundingChallenge(models.Model):
         "res.partner", string="Claimed by", tracking=True
     )
     target_amount = fields.Monetary(tracking=True)
-    fee_amount = fields.Monetary(compute="_compute_amounts", store=True, readonly=True)
+    fee_amount = fields.Monetary(
+        compute="_compute_amounts",
+        store=True,
+        readonly=True,
+        help="When a challenge is claimed, this amount will be deducted "
+        "from the total amount pledged to cover overhead costs",
+    )
     fee_percentage = fields.Float(default=lambda self: self._default_fee_percentage())
     claimed_partner_amount = fields.Monetary(
         compute="_compute_amounts",
