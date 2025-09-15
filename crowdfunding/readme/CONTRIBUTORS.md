@@ -1,1 +1,3 @@
 -   Holger Brunn \<mail@hunki-enterprises.com> (https://hunki-enterprises.com)
+-   James Bos \<james@godoo.com.au> (https://www.jamesbos.com)
+-   David James \<david@godoo.com.au> (https://godoo.net)
