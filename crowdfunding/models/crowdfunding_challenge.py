@@ -46,7 +46,7 @@ class CrowdfundingChallenge(models.Model):
     )
     fee_percentage = fields.Float(
         default=lambda self: self._default_fee_percentage(),
-        help="Commission Fee %",
+        string="Commission Fee %",
     )
     claimed_partner_amount = fields.Monetary(
         compute="_compute_amounts",
