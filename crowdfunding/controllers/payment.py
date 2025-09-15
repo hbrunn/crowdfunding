@@ -21,7 +21,7 @@ class Payment(WebsitePayment):
         )
 
     def _crowdfunding_create_partner_mandatory_fields(self, challenge):
-        return ("name", "email", "street", "city", "country_id")
+        return ("name", "email", "street", "city", "zip", "country_id")
 
     def _crowdfunding_create_partner_optional_fields(self, challenge):
         return ()
@@ -36,6 +36,9 @@ class Payment(WebsitePayment):
             or not request.env["res.country"].browse(int(values["country_id"])).exists()
         ):
             errors["country_id"] = _("Invalid country")
+        if values.get("zip") and not values.get("zip").isdigit():
+            errors["zip"] = _("Invalid Zip")
+
         return errors
 
     def _crowdfunding_create_partner_get_values(self, challenge, values):
@@ -92,6 +95,7 @@ class Payment(WebsitePayment):
             invoice = challenge.sudo()._out_invoice(
                 partner, abs(float(kwargs["amount"]))
             )
+            invoice.action_post()
 
             wizard_vals = PaymentLinkWizard.with_context(
                 active_model=invoice._name,
