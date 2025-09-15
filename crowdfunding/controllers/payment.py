@@ -92,6 +92,7 @@ class Payment(WebsitePayment):
             invoice = challenge.sudo()._out_invoice(
                 partner, abs(float(kwargs["amount"]))
             )
+            invoice.action_post()
 
             wizard_vals = PaymentLinkWizard.with_context(
                 active_model=invoice._name,
