@@ -180,7 +180,7 @@ class CrowdfundingChallenge(models.Model):
             )
             this.pledged_amount_unpaid = (
                 sum(this.invoice_ids.mapped("amount_total_signed"))
-                -this.pledged_amount
+                - this.pledged_amount
             )
             this.pledged_amount_total = this.pledged_amount + this.pledged_amount_unpaid
 
@@ -195,7 +195,7 @@ class CrowdfundingChallenge(models.Model):
             )
             this.vendor_amount_unpaid = (
                 sum(this.vendor_bill_ids.mapped("amount_total_signed"))
-                -this.vendor_amount
+                - this.vendor_amount
             )
             this.vendor_amount_total = this.vendor_amount + this.vendor_amount_unpaid
 

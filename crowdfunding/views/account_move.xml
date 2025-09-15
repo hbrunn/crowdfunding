@@ -6,26 +6,29 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
-            <group position="inside">
-                <group
+            <notebook position="inside">
+                <page
                     name="crowdfunding"
                     attrs="{'invisible': [('crowdfunding_challenge_id', '=', False), ('state', '!=', 'draft')]}"
+                    string="Crowdfunding"
                 >
+                <group>
                     <field name="crowdfunding_challenge_id" />
                     <field
-                        name="crowdfunding_target_amount"
-                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
-                    />
+                            name="crowdfunding_target_amount"
+                            attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                        />
                     <field
-                        name="crowdfunding_pledged_amount"
-                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
-                    />
+                            name="crowdfunding_pledged_amount"
+                            attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                        />
                     <field
-                        name="crowdfunding_vendor_amount"
-                        attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
-                    />
+                            name="crowdfunding_vendor_amount"
+                            attrs="{'invisible': [('crowdfunding_challenge_id', '=', False)]}"
+                        />
                 </group>
-            </group>
+                </page>
+            </notebook>
         </field>
     </record>
 </odoo>
