@@ -331,9 +331,11 @@ class CrowdfundingChallenge(models.Model):
             invoice_line_ids=[(0, 0, invoice_line_vals)],
         )
 
+    @api.model
     def _domain_portal_access(self):
         return [("is_published", "=", True)]
 
+    @api.model
     def _domain_website_access(self):
         return [("is_published", "=", True)]
 
