@@ -33,8 +33,7 @@ class CrowdfundingChallenge(models.Model):
     )
     description = fields.Html()
     description_url = fields.Char(
-        "Description URL",
-        help="URL for more information about this challenge"
+        "Description URL", help="URL for more information about this challenge"
     )
     description_image = fields.Binary(
         help="Image that will be displayed on the challenge description"
