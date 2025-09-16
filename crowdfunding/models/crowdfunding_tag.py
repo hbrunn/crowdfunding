@@ -10,6 +10,7 @@ class CrowdfundingTag(models.Model):
     _description = "Crowdfunding tag"
 
     name = fields.Char(required=True)
+    active = fields.Boolean(default=True, help="Set active to false to hide the Tag without removing it.")
     company_id = fields.Many2one(
         "res.company", required=True, default=lambda self: self.env.company
     )
