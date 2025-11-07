@@ -2,7 +2,11 @@
 <!-- Copyright 2025 Hunki Enterprises BV
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0) -->
 <data>
-    <menuitem id="menu_crowdfunding_root" name="Crowdfunding" />
+    <menuitem
+        id="menu_crowdfunding_root"
+        name="Crowdfunding"
+        web_icon="crowdfunding,static/description/icon.png"
+    />
     <menuitem
         id="menu_crowdfunding_challenge"
         sequence="10"
