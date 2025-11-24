@@ -347,12 +347,6 @@ msgstr ""
 #. module: crowdfunding
 #: code:addons/crowdfunding/controllers/payment.py:0
 #, python-format
-msgid "Invalid Zip"
-msgstr ""
-
-#. module: crowdfunding
-#: code:addons/crowdfunding/controllers/payment.py:0
-#, python-format
 msgid "Invalid country"
 msgstr ""
 
