@@ -74,6 +74,11 @@ msgid ""
 msgstr ""
 
 #. module: crowdfunding
+#: model_terms:ir.ui.view,arch_db:crowdfunding.template_challenge_detail
+msgid "Challenge Cover"
+msgstr ""
+
+#. module: crowdfunding
 #: model:ir.actions.act_window,name:crowdfunding.action_crowdfunding_challenge
 #: model:ir.ui.menu,name:crowdfunding.menu_crowdfunding_challenge
 msgid "Challenges"
@@ -136,6 +141,11 @@ msgid "Country"
 msgstr ""
 
 #. module: crowdfunding
+#: model:ir.model.fields,field_description:crowdfunding.field_crowdfunding_challenge__cover_properties
+msgid "Cover Properties"
+msgstr ""
+
+#. module: crowdfunding
 #: model_terms:ir.ui.view,arch_db:crowdfunding.view_crowdfunding_challenge_form
 msgid "Create Vendor Bill"
 msgstr ""
@@ -165,7 +175,7 @@ msgstr ""
 #: model:product.template,name:crowdfunding.product_crowdfunding_product_template
 #: model:website.menu,name:crowdfunding.website_menu_crowdfunding
 #: model_terms:ir.ui.view,arch_db:crowdfunding.res_config_settings_view_form
-#: model_terms:ir.ui.view,arch_db:crowdfunding.template_challenge_list
+#: model_terms:ir.ui.view,arch_db:crowdfunding.template_challenge_list_header
 #: model_terms:ir.ui.view,arch_db:crowdfunding.view_move_form
 msgid "Crowdfunding"
 msgstr ""
@@ -265,6 +275,16 @@ msgid ""
 "be done\n"
 "Submitted: Work is submitted, no further payments possible\n"
 "Done: Work is done, all payments done"
+msgstr ""
+
+#. module: crowdfunding
+#: model_terms:ir.ui.view,arch_db:crowdfunding.template_challenge_list_footer
+msgid "Edit the footer of the crowdfunding list"
+msgstr ""
+
+#. module: crowdfunding
+#: model_terms:ir.ui.view,arch_db:crowdfunding.template_challenge_list_header
+msgid "Edit the header of the crowdfunding list"
 msgstr ""
 
 #. module: crowdfunding
