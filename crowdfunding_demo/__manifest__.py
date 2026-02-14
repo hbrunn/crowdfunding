@@ -4,7 +4,7 @@
 {
     "name": "Crowdfunding (demo data)",
     "summary": "Installs demo data to have crowdfunding up and running on runbot",
-    "version": "14.0.1.0.1",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Crowdfunding",
     "website": "https://github.com/OCA/crowdfunding",
@@ -13,12 +13,11 @@
     "license": "AGPL-3",
     "depends": [
         "crowdfunding",
-        "payment_test",
-        "payment_transfer",
+        "payment_demo",
+        "payment_custom",
         "l10n_ch",
     ],
     "demo": [
-        "demo/payment_acquirer.xml",
         "demo/product_product.xml",
         "demo/res_company.xml",
     ],
