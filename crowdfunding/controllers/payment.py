@@ -7,16 +7,17 @@ import werkzeug
 from odoo import _, http
 from odoo.http import request
 
-from odoo.addons.payment.controllers.portal import WebsitePayment
+from odoo.addons.payment.controllers.portal import PaymentPortal
+from odoo.addons.payment.utils import generate_access_token
 
 
-class Payment(WebsitePayment):
+class Payment(PaymentPortal):
     def _crowdfunding_get_partner(self):
         return (
             not request.env.user._is_public()
             and request.env.user.partner_id
             or request.env["res.partner"].browse(
-                request.session.get("crowdfunding", {}).get("partner_id", [])
+                request.session.get("crowdfunding_partner_id", [])
             )
         )
 
@@ -58,7 +59,7 @@ class Payment(WebsitePayment):
         partner = Partner.sudo().create(
             self._crowdfunding_create_partner_get_values(challenge, values)
         )
-        request.session.setdefault("crowdfunding", {})["partner_id"] = partner.id
+        request.session["crowdfunding_partner_id"] = partner.id
         return partner
 
     def _crowdfunding_get_out_invoice_kwargs(self, challenge, partner, kwargs):
@@ -92,7 +93,6 @@ class Payment(WebsitePayment):
         elif "amount" not in kwargs:
             result = request.render("crowdfunding.pay_details", {"object": challenge})
         else:
-            PaymentLinkWizard = request.env["payment.link.wizard"]
             invoice = challenge.sudo()._out_invoice(
                 partner,
                 abs(float(kwargs["amount"])),
@@ -100,23 +100,14 @@ class Payment(WebsitePayment):
             )
             invoice.action_post()
 
-            wizard_vals = PaymentLinkWizard.with_context(
-                active_model=invoice._name,
-                active_id=invoice.id,
-            ).default_get(PaymentLinkWizard._fields)
-
-            payment_wizard = PaymentLinkWizard.new(wizard_vals)
-
-            payment_wizard._compute_values()
             kwargs["amount"] = invoice.amount_total
-            kwargs["access_token"] = payment_wizard.access_token
+            kwargs["access_token"] = generate_access_token(
+                partner.id, invoice.amount_total, challenge.currency_id.id
+            )
             kwargs["company_id"] = invoice.company_id.id
             kwargs["currency_id"] = challenge.currency_id.id
             kwargs["invoice_id"] = invoice.id
             kwargs["partner_id"] = partner.id
-            kwargs["reference"] = "crowdfunding/%s/%s" % (
-                challenge.id,
-                partner.id,
-            )
-            result = self.pay(**kwargs)
+            kwargs["reference"] = f"crowdfunding/{challenge.id}/{partner.id}"
+            result = self.payment_pay(**kwargs)
         return result

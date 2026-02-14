@@ -28,7 +28,7 @@
                 t-set="challenge_list_header_description"
             >Edit the header of the crowdfunding list</t>
             <div
-                id="challenge_list_header"
+                id="oe_structure_challenge_list_header"
                 class="oe_structure"
                 t-att-data-editor-sub-message="challenge_list_header_description"
             >
@@ -51,7 +51,7 @@
                 t-set="challenge_list_footer_description"
             >Edit the footer of the crowdfunding list</t>
             <div
-                id="challenge_list_footer"
+                id="oe_structure_challenge_list_footer"
                 class="oe_structure oe_empty"
                 t-att-data-editor-sub-message="challenge_list_footer_description"
             />

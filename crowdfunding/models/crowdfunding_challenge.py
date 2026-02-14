@@ -3,8 +3,6 @@
 
 from odoo import _, api, exceptions, fields, models, tools
 
-from odoo.addons.http_routing.models.ir_http import slug
-
 
 def _extend_context_str(context_str, **kwargs):
     context_str = context_str.strip() or "{}"
@@ -122,7 +120,6 @@ class CrowdfundingChallenge(models.Model):
         domain=[("move_type", "in", ["out_invoice", "out_refund"])],
     )
     vendor_amount = fields.Monetary(
-        "Vendor Amount",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,
@@ -136,7 +133,6 @@ class CrowdfundingChallenge(models.Model):
         tracking=True,
     )
     vendor_amount_total = fields.Monetary(
-        "Vendor Amount Total",
         compute="_compute_vendor_bills",
         readonly=True,
         store=True,
@@ -192,12 +188,10 @@ class CrowdfundingChallenge(models.Model):
             invoices = this.invoice_ids.filtered(lambda x: x.state != "cancel")
             this.invoice_count = len(invoices)
             this.pledged_amount = sum(
-                invoices.filtered(lambda x: x.state == "posted").mapped(
-                    "amount_total_signed"
-                )
+                invoices.filtered(lambda x: x.state == "posted").mapped("amount_total")
             )
             this.pledged_amount_unpaid = (
-                sum(invoices.mapped("amount_total_signed")) - this.pledged_amount
+                sum(invoices.mapped("amount_total")) - this.pledged_amount
             )
             this.pledged_amount_total = this.pledged_amount + this.pledged_amount_unpaid
 
@@ -212,17 +206,17 @@ class CrowdfundingChallenge(models.Model):
             this.vendor_bill_count = len(vendor_bills)
             this.vendor_amount = sum(
                 vendor_bills.filtered(lambda x: x.state == "posted").mapped(
-                    "amount_total_signed"
+                    "amount_total"
                 )
             )
             this.vendor_amount_unpaid = (
-                sum(vendor_bills.mapped("amount_total_signed")) - this.vendor_amount
+                sum(vendor_bills.mapped("amount_total")) - this.vendor_amount
             )
             this.vendor_amount_total = this.vendor_amount + this.vendor_amount_unpaid
 
     def _compute_website_url(self):
         for this in self:
-            this.website_url = f"/crowdfunding/{slug(this)}"
+            this.website_url = f"/crowdfunding/{self.env['ir.http']._slug(this)}"
 
     def _compute_website_meta_description(self):
         for this in self:
@@ -231,7 +225,8 @@ class CrowdfundingChallenge(models.Model):
     def _compute_website_meta_og_img(self):
         for this in self:
             this.website_meta_og_img = (
-                f"/web/image/crowdfunding.challenge/{slug(this)}/description_image"
+                f"/web/image/crowdfunding.challenge/{self.env['ir.http']._slug(this)}"
+                "/description_image"
                 if this.description_image
                 else None
             )
@@ -254,7 +249,7 @@ class CrowdfundingChallenge(models.Model):
                     sum(
                         this.vendor_bill_ids.filtered(
                             lambda x: x.payment_state == "paid"
-                        ).mapped("amount_total_signed")
+                        ).mapped("amount_total")
                     ),
                     this.claimed_partner_amount,
                 )
@@ -312,13 +307,6 @@ class CrowdfundingChallenge(models.Model):
         action = self.env["ir.actions.act_window"]._for_xml_id(
             "crowdfunding.action_crowdfunding_invoicing_wizard"
         )
-        # workaround for weird bug in v14 not displaying correct status for vendor_bill_ids
-        # in not yet saved wizard, in newer versions just returning the action should work
-        wizard = (
-            self.env[action["res_model"]].with_context(active_ids=self.ids).create({})
-        )
-        wizard._onchange_vendor_bill_ids()
-        action["res_id"] = wizard.id
         return action
 
     def _in_invoice(self, percentage=None, **kwargs):

@@ -15,5 +15,8 @@ class PaymentTransaction(models.Model):
         for this in self:
             if not this.crowdfunding_challenge_id or this.state != "done":
                 continue
-            # TODO send some thank you note
+            this._post_process_crowdfunding()
         return super()._post_process()
+
+    def _post_process_crowdfunding(self):
+        pass

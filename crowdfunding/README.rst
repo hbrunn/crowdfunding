@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 ============
 Crowdfunding
 ============
@@ -17,17 +13,17 @@ Crowdfunding
 .. |badge1| image:: https://img.shields.io/badge/maturity-Alpha-red.png
     :target: https://odoo-community.org/page/development-status
     :alt: Alpha
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fcrowdfunding-lightgray.png?logo=github
-    :target: https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding
+    :target: https://github.com/OCA/crowdfunding/tree/18.0/crowdfunding
     :alt: OCA/crowdfunding
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/crowdfunding-14-0/crowdfunding-14-0-crowdfunding
+    :target: https://translation.odoo-community.org/projects/crowdfunding-18-0/crowdfunding-18-0-crowdfunding
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/crowdfunding&target_branch=14.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/crowdfunding&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -82,15 +78,15 @@ Known issues / Roadmap
 As this module is designed to provide the bare neccessities, a couple of
 other modules will add more advanced functionality
 
-- crowdfunding_membership allowing to restrict creating/claiming to
-  members only
-- crowdfunding_project allowing to create crowdfunding challenges from
-  projects/tasks or vice versa
-- crowdfunding_github allowing to create crowdfunding challenges from
-  issues of some github project
-- crowdfunding_gitlab the same as above but for gitlab
-- crowdfunding_category allowing to move some of the base company wide
-  configuration to categories
+-  crowdfunding_membership allowing to restrict creating/claiming to
+   members only
+-  crowdfunding_project allowing to create crowdfunding challenges from
+   projects/tasks or vice versa
+-  crowdfunding_github allowing to create crowdfunding challenges from
+   issues of some github project
+-  crowdfunding_gitlab the same as above but for gitlab
+-  crowdfunding_category allowing to move some of the base company wide
+   configuration to categories
 
 Bug Tracker
 ===========
@@ -98,7 +94,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/crowdfunding/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/crowdfunding/issues/new?body=module:%20crowdfunding%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/crowdfunding/issues/new?body=module:%20crowdfunding%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -113,14 +109,14 @@ Authors
 Contributors
 ------------
 
-- Holger Brunn <mail@hunki-enterprises.com>
-  (https://hunki-enterprises.com)
-- Houssine Bakkali <houssine.bakkali@gmail.com> Open Architects
-  Consulting SRL (https://github.com/houssine78)
-- Henrik Norlin <henrik@loym.com>
-- James Bos <james@godoo.com.au> (https://www.jamesbos.com)
-- David James <david@godoo.com.au> (https://godoo.net)
-- Thibault Rey <thibault.rey@akretion.com> (https://akretion.com)
+-  Holger Brunn <mail@hunki-enterprises.com>
+   (https://hunki-enterprises.com)
+-  Houssine Bakkali <houssine.bakkali@gmail.com> Open Architects
+   Consulting SRL (https://github.com/houssine78)
+-  Henrik Norlin <henrik@loym.com>
+-  James Bos <james@godoo.com.au> (https://www.jamesbos.com)
+-  David James <david@godoo.com.au> (https://godoo.net)
+-  Thibault Rey <thibault.rey@akretion.com> (https://akretion.com)
 
 Maintainers
 -----------
@@ -143,6 +139,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-hbrunn| 
 
-This module is part of the `OCA/crowdfunding <https://github.com/OCA/crowdfunding/tree/14.0/crowdfunding>`_ project on GitHub.
+This module is part of the `OCA/crowdfunding <https://github.com/OCA/crowdfunding/tree/18.0/crowdfunding>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

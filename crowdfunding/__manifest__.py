@@ -4,7 +4,7 @@
 {
     "name": "Crowdfunding",
     "summary": "Turn Odoo into a platform for crowdfunding",
-    "version": "14.0.1.3.1",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Crowdfunding",
     "website": "https://github.com/OCA/crowdfunding",
@@ -21,7 +21,6 @@
         "data/website_menu.xml",
         "security/crowdfunding_security.xml",
         "security/ir.model.access.csv",
-        "templates/assets.xml",
         "templates/crowdfunding_challenge.xml",
         "templates/payment.xml",
         "views/account_move.xml",
@@ -34,4 +33,9 @@
     "demo": [
         "demo/crowdfunding_challenge.xml",
     ],
+    "assets": {
+        "web.assets_tests": [
+            "crowdfunding/static/tests/tours/crowdfunding_frontend.esm.js",
+        ],
+    },
 }

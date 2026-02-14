@@ -11,45 +11,45 @@
                 <header>
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': [('state', '!=', 'draft')]}"
                         type="object"
                         name="action_open"
                         string="Open"
+                        invisible="state != 'draft'"
                     />
                     <button
                         class="btn"
-                        attrs="{'invisible': [('state', 'in', ['draft', 'done'])]}"
                         type="object"
                         name="action_cancel"
                         string="Cancel"
+                        invisible="state in ['draft', 'done']"
                     />
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', '!=', 'open')]}"
                         type="object"
                         name="action_claimed"
                         string="Set Claimed"
+                        invisible="(not claimed_partner_id or state != 'open')"
                     />
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', '!=', 'claimed')]}"
                         type="object"
                         name="action_submitted"
                         string="Mark As Submitted"
+                        invisible="(not claimed_partner_id or state != 'claimed')"
                     />
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': ['|', ('claimed_partner_id', '=', False), ('state', 'not in', ['claimed', 'submitted'])]}"
                         type="object"
                         name="action_invoice_wizard"
                         string="Create Vendor Bill"
+                        invisible="(not claimed_partner_id or state not in ['claimed', 'submitted'])"
                     />
                     <button
                         class="btn btn-primary"
-                        attrs="{'invisible': [('state', '!=', 'submitted')]}"
                         type="object"
                         name="action_done"
                         string="Set Done"
+                        invisible="state != 'submitted'"
                     />
                     <field name="state" widget="statusbar" />
                 </header>
@@ -60,7 +60,7 @@
                             class="oe_stat_button"
                             type="object"
                             icon="fa-pencil-square-o"
-                            attrs="{'invisible': [('vendor_bill_ids', '=', [])]}"
+                            invisible="not vendor_bill_ids"
                         >
                             <field
                                 name="vendor_bill_count"
@@ -73,7 +73,7 @@
                             class="oe_stat_button"
                             type="object"
                             icon="fa-money"
-                            attrs="{'invisible': [('invoice_count', '=', 0)]}"
+                            invisible="invoice_count == 0"
                         >
                             <field
                                 name="invoice_count"
@@ -102,12 +102,12 @@
                             <field name="pledged_amount" />
                             <field
                                 name="pledged_amount_unpaid"
-                                attrs="{'invisible': [('pledged_amount_unpaid', '=', 0)]}"
+                                invisible="pledged_amount_unpaid == 0"
                             />
                             <field
                                 name="claimed_partner_id"
-                                attrs="{'readonly': [('state', 'not in', ('draft', 'open'))]}"
                                 placeholder="Select partner to work on this challenge"
+                                readonly="state not in ('draft', 'open')"
                             />
                             <field name="claimed_partner_amount" />
                             <field name="vendor_amount" />
@@ -152,10 +152,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" />
-                    <field name="message_ids" />
-                </div>
+                <chatter />
             </form>
         </field>
     </record>
@@ -163,17 +160,18 @@
     <record id="view_crowdfunding_challenge_list" model="ir.ui.view">
         <field name="model">crowdfunding.challenge</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="state" />
-                <field name="target_amount" />
-                <field name="pledged_amount" />
-                <field name="pledged_amount_unpaid" />
-                <field name="pledged_amount_total" />
-                <field name="vendor_amount" />
-                <field name="website_published" />
+                <field name="target_amount" sum="Sum" />
+                <field name="pledged_amount" sum="Sum" />
+                <field name="pledged_amount_unpaid" sum="Sum" />
+                <field name="pledged_amount_total" sum="Sum" />
+                <field name="vendor_amount" sum="Sum" />
+                <field name="is_published" />
                 <field name="pledged_percentage" widget="float" />
-            </tree>
+                <field name="currency_id" column_invisible="True" />
+            </list>
         </field>
     </record>
 
