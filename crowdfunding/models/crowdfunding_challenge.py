@@ -188,7 +188,9 @@ class CrowdfundingChallenge(models.Model):
             invoices = this.invoice_ids.filtered(lambda x: x.state != "cancel")
             this.invoice_count = len(invoices)
             this.pledged_amount = sum(
-                invoices.filtered(lambda x: x.state == "posted").mapped("amount_total")
+                invoices.filtered(
+                    lambda x: x.state == "posted" and x.payment_state == "paid"
+                ).mapped("amount_total")
             )
             this.pledged_amount_unpaid = (
                 sum(invoices.mapped("amount_total")) - this.pledged_amount
@@ -205,9 +207,9 @@ class CrowdfundingChallenge(models.Model):
             vendor_bills = this.vendor_bill_ids.filtered(lambda x: x.state != "cancel")
             this.vendor_bill_count = len(vendor_bills)
             this.vendor_amount = sum(
-                vendor_bills.filtered(lambda x: x.state == "posted").mapped(
-                    "amount_total"
-                )
+                vendor_bills.filtered(
+                    lambda x: x.state == "posted" and x.payment_state == "paid"
+                ).mapped("amount_total")
             )
             this.vendor_amount_unpaid = (
                 sum(vendor_bills.mapped("amount_total")) - this.vendor_amount
