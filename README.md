@@ -18,7 +18,13 @@ crowdfunding
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[crowdfunding](crowdfunding/) | 18.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Turn Odoo into a platform for crowdfunding
+[crowdfunding_demo](crowdfunding_demo/) | 18.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Installs demo data to have crowdfunding up and running on runbot
+[crowdfunding_public_pledge](crowdfunding_public_pledge/) | 18.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Allow users to mark their pledges as public
 
 [//]: # (end addons)
 
