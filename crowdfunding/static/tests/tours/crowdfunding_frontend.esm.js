@@ -75,7 +75,6 @@ export function crowdfunding_frontend_steps(values) {
 }
 
 registry.category("web_tour.tours").add("crowdfunding_frontend_us", {
-    test: true,
     url: "/crowdfunding",
     steps: () =>
         crowdfunding_frontend_steps({
@@ -85,7 +84,6 @@ registry.category("web_tour.tours").add("crowdfunding_frontend_us", {
 });
 
 registry.category("web_tour.tours").add("crowdfunding_frontend_nl", {
-    test: true,
     url: "/crowdfunding",
     steps: () =>
         crowdfunding_frontend_steps({
