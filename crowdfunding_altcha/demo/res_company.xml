@@ -1,0 +1,7 @@
+<odoo>
+    <record id="website.default_website" model="website">
+        <field name="altcha_key">test_key</field>
+        <field name="altcha_private_key">test_secret_key</field>
+        <field name="altcha_cost">128</field>
+    </record>
+</odoo>

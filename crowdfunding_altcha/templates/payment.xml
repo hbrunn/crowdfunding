@@ -1,0 +1,7 @@
+<odoo>
+    <template id="pay_partner_details" inherit_id="crowdfunding.pay_partner_details">
+        <form position="attributes">
+            <attribute name="class" add="website_altcha_form" separator=" " />
+        </form>
+    </template>
+</odoo>
