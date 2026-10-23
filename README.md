@@ -1,7 +1,7 @@
 
 [![Support the OCA](https://odoo-community.org/readme-banner-image)](https://odoo-community.org/get-involved?utm_source=repo-readme)
 
-# crowdfunding
+# Crowdfunding platform for Odoo
 [![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/crowdfunding&target_branch=18.0)
 [![Pre-commit Status](https://github.com/OCA/crowdfunding/actions/workflows/pre-commit.yml/badge.svg?branch=18.0)](https://github.com/OCA/crowdfunding/actions/workflows/pre-commit.yml?query=branch%3A18.0)
 [![Build Status](https://github.com/OCA/crowdfunding/actions/workflows/test.yml/badge.svg?branch=18.0)](https://github.com/OCA/crowdfunding/actions/workflows/test.yml?query=branch%3A18.0)
@@ -10,7 +10,7 @@
 
 <!-- /!\ do not modify above this line -->
 
-crowdfunding
+This set of addons turn Odoo into a platform for crowdfunding
 
 <!-- /!\ do not modify below this line -->
 

@@ -1,5 +1,5 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.40
+_commit: v1.45
 _src_path: git+https://github.com/OCA/oca-addons-repo-template
 additional_ruff_rules: []
 convert_readme_fragments_to_markdown: true
@@ -16,9 +16,10 @@ odoo_test_flavor: Both
 odoo_version: 18.0
 org_name: Odoo Community Association (OCA)
 org_slug: OCA
+postgres_image: ''
 rebel_module_groups: []
-repo_description: crowdfunding
-repo_name: crowdfunding
+repo_description: This set of addons turn Odoo into a platform for crowdfunding
+repo_name: Crowdfunding platform for Odoo
 repo_slug: crowdfunding
 repo_website: https://github.com/OCA/crowdfunding
 use_pyproject_toml: true
